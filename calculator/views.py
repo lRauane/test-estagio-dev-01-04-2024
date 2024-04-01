@@ -1,30 +1,21 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from .models import Consumer, DiscountRule
 
-# TODO: Your list view should do the following tasks
-"""
--> Recover all consumers from the database
--> Get the discount value for each consumer
--> Calculate the economy
--> Send the data to the template that will be rendered
-"""
+def consumer_list(request):
+    consumers = Consumer.objects.all()
+    for consumer in consumers:
+        discount_rule = DiscountRule.objects.filter(consumer_type=consumer.consumer_type,
+                                                    consumption_range=consumer.consumption_range).first()
+        if discount_rule:
+            consumer.annual_savings = consumer.consumption * consumer.distributor_tax * discount_rule.discount_value
+    return render(request, 'list.html', {'consumers': consumers})
 
-
-def view1(request):
-    # Create the first view here.
-    pass
-
-
-# TODO: Your create view should do the following tasks
-"""Create a view to perform inclusion of consumers. The view should do:
--> Receive a POST request with the data to register
--> If the data is valid (validate document), create and save a new Consumer object associated with the right discount rule object
--> Redirect to the template that list all consumers
-
-Your view must be associated with an url and a template different from the first one. A link to
-this page must be provided in the main page.
-"""
-
-
-def view2():
-    # Create the second view here.
-    pass
+def add_consumer():
+    if request.method == 'POST':
+        form = ConsumerForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('consumer_list')
+    else:
+        form = ConsumerForm()
+    return render(request, 'form.html', {'form': form})

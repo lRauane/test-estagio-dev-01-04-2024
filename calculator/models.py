@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class Consumer(models.Model):
     name = models.CharField("Nome do Consumidor", max_length=128)
     document = models.CharField("Documento(CPF/CNPJ)", max_length=14, unique=True)
@@ -11,18 +10,22 @@ class Consumer(models.Model):
     distributor_tax = models.FloatField(
         "Tarifa da Distribuidora", blank=True, null=True
     )
-    #  create the foreign key for discount rule model here
+    discount_rule = models.ForeignKey('DiscountRule', on_delete=models.CASCADE, verbose_name="Discount Rule", null=True, blank=True)
 
+    def __str__(self):
+        return self.name
 
-# TODO: Create the model DiscountRules below
-"""Fields:
--> Consumer type  
--> Consumption range
--> Cover value
--> Discount value
-The first three fields should be a select with the values provided in the table
-defined in the readme of the repository. Discount should be numerical
-"""
+class DiscountRule(models.Model):
+    CONSUMER_TYPES = (
+        ('Residential', 'Residential'),
+        ('Commercial', 'Commercial'),
+        ('Industrial', 'Industrial'),
+    )
 
-# TODO: You must populate the consumer table with the data provided in the file consumers.xlsx
-#  and associate each one with the correct discount rule
+    consumption_range = models.CharField("Consumption Range", max_length=50)
+    consumer_type = models.CharField("Consumer Type", max_length=20, choices=CONSUMER_TYPES)
+    cover_value = models.FloatField("Cover Value")
+    discount_value = models.FloatField("Discount Value")
+
+    def __str__(self):
+        return f"{self.consumer_type} - {self.consumption_range}"
