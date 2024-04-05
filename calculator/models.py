@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Consumer(models.Model):
     name = models.CharField("Nome do Consumidor", max_length=128)
     document = models.CharField("Documento(CPF/CNPJ)", max_length=14, unique=True)
@@ -15,6 +16,7 @@ class Consumer(models.Model):
     def __str__(self):
         return self.name
 
+
 class DiscountRule(models.Model):
     # Tipo de consumo
     CONSUMER_TYPES = (
@@ -29,7 +31,6 @@ class DiscountRule(models.Model):
         ('>= 10.000 kWh e <= 20.000 kWh', '>= 10.000 kWh e <= 20.000 kWh'),
         ('> 20.000 kWh', '> 20.000 kWh'),
     )
-
 
     consumption_range = models.CharField("Consumption Range", max_length=50, choices=CONSUMPTION_RANGE_CHOICES)
     consumer_type = models.CharField("Consumer Type", max_length=20, choices=CONSUMER_TYPES)

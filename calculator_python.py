@@ -39,6 +39,7 @@ def calculator(consumption: list, distributor_tax: float, tax_type: str) -> tupl
     annual_savings = discount * 12
     monthly_savings = discount
 
+
     return (
         round(annual_savings, 2),
         round(monthly_savings, 2),

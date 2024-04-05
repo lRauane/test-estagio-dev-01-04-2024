@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculator Form</title>
+    <title>Formulário do Calculadora de Economia de Energia</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -30,6 +30,7 @@
             color: #333;
         }
         input[type="number"],
+        input[type="text"],
         select {
             width: 100%;
             padding: 10px;
@@ -51,27 +52,55 @@
         input[type="submit"]:hover {
             background-color: #45a049;
         }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
     </style>
 </head>
 <body>
-    <h1>Energy Savings Calculator</h1>
-    <form action="{% url 'calculator_view' %}" method="post">
+    <h1>Calculadora de Economia de Energia</h1>
+    <form action="{% url 'form' %}" method="post">
         {% csrf_token %}
-        <label for="consumption1">Consumption (Month 1):</label>
+        <label for="consumption1">Consumo (Mês 1):</label>
         <input type="number" id="consumption1" name="consumption1"><br><br>
-        <label for="consumption2">Consumption (Month 2):</label>
+        <label for="consumption2">Consumo (Mês 2):</label>
         <input type="number" id="consumption2" name="consumption2"><br><br>
-        <label for="consumption3">Consumption (Month 3):</label>
+        <label for="consumption3">Consumo (Mês 3):</label>
         <input type="number" id="consumption3" name="consumption3"><br><br>
-        <label for="distributor_tax">Distributor Tax:</label>
-        <input type="number" id="distributor_tax" name="distributor_tax"><br><br>
-        <label for="tax_type">Tax Type:</label>
+        <label for="distributor_tax">Tarifa da Distribuidora:</label>
+        <input type="text" id="distributor_tax" name="distributor_tax"><br><br>
+        <label for="tax_type">Tipo de Tarifa:</label>
         <select id="tax_type" name="tax_type">
-            <option value="Residencial">Residential</option>
-            <option value="Comercial">Commercial</option>
+            <option value="Residencial">Residencial</option>
+            <option value="Comercial">Comercial</option>
             <option value="Industrial">Industrial</option>
         </select><br><br>
-        <input type="submit" value="Calculate">
+        <input type="submit" value="Calcular">
     </form>
+     <table>
+        <tr>
+            <th>Economia Anual</th>
+            <td>R$ {{ annual_savings }}</td>
+        </tr>
+        <tr>
+            <th>Economia Mensal</th>
+            <td>R$ {{ monthly_savings }}</td>
+        </tr>
+        <tr>
+            <th>Desconto Aplicado</th>
+            <td>{{ applied_discount }}</td>
+        </tr>
+        <tr>
+            <th>Cobertura</th>
+            <td>{{ coverage }}</td>
+        </tr>
+    </table>
+
 </body>
 </html>
