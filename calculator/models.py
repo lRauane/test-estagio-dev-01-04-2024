@@ -10,19 +10,28 @@ class Consumer(models.Model):
     distributor_tax = models.FloatField(
         "Tarifa da Distribuidora", blank=True, null=True
     )
-    discount_rule = models.ForeignKey('DiscountRule', on_delete=models.CASCADE, verbose_name="Discount Rule", null=True, blank=True)
+    discount_rule = models.ForeignKey('DiscountRule', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
 
 class DiscountRule(models.Model):
+    # Tipo de consumo
     CONSUMER_TYPES = (
-        ('Residential', 'Residential'),
-        ('Commercial', 'Commercial'),
+        ('Residencial', 'Residencial'),
+        ('Comercial', 'Comercial'),
         ('Industrial', 'Industrial'),
     )
 
-    consumption_range = models.CharField("Consumption Range", max_length=50)
+    # Opções de faixa de consumo
+    CONSUMPTION_RANGE_CHOICES = (
+        ('< 10.000 kWh', '< 10.000 kWh'),
+        ('>= 10.000 kWh e <= 20.000 kWh', '>= 10.000 kWh e <= 20.000 kWh'),
+        ('> 20.000 kWh', '> 20.000 kWh'),
+    )
+
+
+    consumption_range = models.CharField("Consumption Range", max_length=50, choices=CONSUMPTION_RANGE_CHOICES)
     consumer_type = models.CharField("Consumer Type", max_length=20, choices=CONSUMER_TYPES)
     cover_value = models.FloatField("Cover Value")
     discount_value = models.FloatField("Discount Value")
